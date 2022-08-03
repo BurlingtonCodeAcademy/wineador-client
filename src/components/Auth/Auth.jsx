@@ -38,7 +38,20 @@ export default function Auth(props) {
             password: password
         }
 
+        let url = login ? 
+            "http://localhost:4000/api/auth/login" :
+            "http://localhost:4000/api/auth/register"
         
+        fetch(url, {
+            method: "POST",
+            body: JSON.stringify(requestBody),
+            headers: new Headers({
+                "Content-Type": "application/json"
+            })
+        })
+        .then(res => res.json())
+        .then(data => {props.updateLocalStorage(data.token); console.log(data)})
+        .catch(err => console.log(err))
     }
 
     const signup = () => !login ? (
@@ -87,7 +100,7 @@ export default function Auth(props) {
                 />
                 </div>
                 <button onClick={toggleLogin}>{isSignup()}</button>
-                <button type="submit">Submit</button>
+                <button type="submit" onClick={handleSubmit}>Submit</button>
             </form>
         </div>
     )
